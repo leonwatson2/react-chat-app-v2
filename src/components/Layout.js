@@ -30,7 +30,6 @@ export const Layout = () => {
 	*	If the user name is already logged in.
 	*/
 	const reconnectUserInfo = useCallback(() => {
-		console.log("ReConnected");
 		if (user != null) {
 			socket.emit(CONSTANTS.USER_CONNECTED, user);
 		}
@@ -56,7 +55,6 @@ export const Layout = () => {
 
 	useEffect(() => {
 		const newSocket = io(serverURI);
-		console.log('newSocket: ', { newSocket });
 		setSocket(newSocket);
 
 		return () => {
