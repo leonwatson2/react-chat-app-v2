@@ -25,7 +25,6 @@ export function SocketManager(socket) {
   console.log('Socket ID: ' + socket.id)
   //Verify Username 1
   socket.on(VERIFY_USER, function (newUser, callback) {
-    console.log('newUser: ' + newUser)
     if (!isUser(connectedUsers, newUser)) {
 
       callback({ isUser: false, user: createUser({ name: newUser }) })
@@ -45,7 +44,6 @@ export function SocketManager(socket) {
     sendMessageToChatFromUser = sendMessageToChat(user.name)
     sendTypingFromUser = sendTypingToChat(user.name)
 
-    console.log({ connectedUsers, sendTypingFromUser });
     io.emit(USER_CONNECTED, connectedUsers)
 
   })
@@ -73,7 +71,6 @@ export function SocketManager(socket) {
 
   //user sends message 6
   socket.on(MESSAGE_SENT, function ({ chatId, message }) {
-    console.log('message: ', { message, chatId, sendMessageToChatFromUser })
     sendMessageToChatFromUser(chatId, message)
   })
 
@@ -94,7 +91,6 @@ export function SocketManager(socket) {
 function sendMessageToChat(sender) {
 
   return (chatId, message) => {
-    console.log('emit', `${MESSAGE_RECIEVED}-${chatId}`);
     io.emit(`${MESSAGE_RECIEVED}-${chatId}`, {
       chatId,
       message: createMessage({ message, sender })
