@@ -5,20 +5,21 @@ import { SocketManager } from './socketManager.js'
 
 const app = express()
 
-const PORT = process.env.PORT || 3231
+const PORT = process.env.PORT || 3000
 
 const server = createServer(app);
+
 
 export const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000"
   }
 });
+app.get('/', (req, res) => {
+  res.write(`<h1>Server is running on port ${PORT}</h1>`);
+  res.end();
+});
 
-
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-})
 io.on('connection', SocketManager);
 
 server.listen(PORT, function () {
