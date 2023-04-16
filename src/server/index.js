@@ -1,19 +1,13 @@
-import express from 'express';
-import http from 'http';
-import { Server } from "socket.io";
+var express = require('express')
+var app = express()
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+app.set('port', (process.env.PORT || 5000))
+app.use(express.static(__dirname + '/public'))
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
+app.get('/', function (request, response) {
+    response.send('Hello World!')
+})
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-});
-
-server.listen(3231, () => {
-    console.log('listening on *:3000');
-});
+app.listen(app.get('port'), function () {
+    console.log("Node app is running at localhost:" + app.get('port'))
+})
