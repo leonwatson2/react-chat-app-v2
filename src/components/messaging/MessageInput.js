@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 function MessageInput({ sendMessage, sendTyping }) {
 	const [message, setMessage] = useState('');
-	const [isTyping, setIsTyping] = useState(false);
+	// const [, setIsTyping] = useState(false);
 	const typingIntervalRef = useRef(null);
 	const messageInputRef = useRef(null);
 	const lastUpdateTimeRef = useRef(Date.now());
@@ -37,20 +37,20 @@ function MessageInput({ sendMessage, sendTyping }) {
 		// }
 	}
 
-	const startCheckingTyping = () => {
-		typingIntervalRef.current = setInterval(() => {
-			if (Date.now() - lastUpdateTimeRef.current > 300) {
-				setIsTyping(false);
-				stopCheckingTyping();
-			}
-		}, 300);
-	}
+	// const startCheckingTyping = () => {
+	// 	typingIntervalRef.current = setInterval(() => {
+	// 		if (Date.now() - lastUpdateTimeRef.current > 300) {
+	// 			setIsTyping(false);
+	// 			stopCheckingTyping();
+	// 		}
+	// 	}, 300);
+	// }
 
 
 
-	const blur = () => {
-		messageInputRef.current.blur();
-	}
+	// const blur = () => {
+	// 	messageInputRef.current.blur();
+	// }
 
 	return (
 		<div className="message-input">

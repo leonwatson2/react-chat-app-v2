@@ -12,6 +12,20 @@ export const Layout = () => {
 	const [, setError] = useState('');
 
 	/*
+	*	Sets the current user logged in
+	*	@param user response  object {isUser:boolean user:{id:number, name:string}}
+	*/
+	const handleSetUser = useCallback((responseUser) => {
+		if (!responseUser.isUser) {
+			setUser(responseUser.user);
+			socket.emit(CONSTANTS.USER_CONNECTED, responseUser.user);
+		} else {
+			setError("User name taken.");
+		}
+	}, [socket]);
+
+
+	/*
 	*	Connectes user info back to the server.
 	*	If the user name is already logged in.
 	*/
@@ -35,7 +49,7 @@ export const Layout = () => {
 				handleSetUser({ isUser: false, user: user })
 			}
 		}
-	}, [socket, reconnectUserInfo]);
+	}, [socket, reconnectUserInfo, handleSetUser, user]);
 
 
 	useEffect(() => {
@@ -48,19 +62,6 @@ export const Layout = () => {
 	}, []);
 
 
-	/*
-	 *	Sets the current user logged in
-	 *	@param user response  object {isUser:boolean user:{id:number, name:string}}
-	 */
-	const handleSetUser = useCallback((responseUser) => {
-		if (!responseUser.isUser) {
-			console.log('response: ', { responseUser })
-			setUser(responseUser.user);
-			socket.emit(CONSTANTS.USER_CONNECTED, responseUser.user);
-		} else {
-			setError("User name taken.");
-		}
-	}, [socket]);
 
 	/*
 	 *	Sets the user to null.

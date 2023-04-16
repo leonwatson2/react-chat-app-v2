@@ -13,49 +13,20 @@ export default function ChatContainer({
 
 	const [chats, setChats] = useState([]);
 	const [activeChat, setActiveChat] = useState(null);
-	const [socketEvents, setSocketEvents] = useState([]);
 
 
-	const addMessageToChat = useCallback((chatId, message) => {
+	const addMessageToChat = useCallback(({ chatId, message }) => {
 
 		let newChats = chats.map((chat) => {
 			if (chat.id === chatId) chat.messages.push(message);
 			return chat;
 		});
-		console.log({ newChats, chats })
 		setChats(newChats);
 
 	}, [chats, setChats]);
 
-	const addChat = useCallback((chat, reset) => {
 
-		const newChats = reset ? [chat] : [...chats, chat];
-
-		setChats(newChats);
-
-		const messageEvent = `${CONSTANTS.MESSAGE_RECIEVED}-${chat.id}`;
-		const typingEvent = `${CONSTANTS.TYPING}-${chat.id}`;
-		console.log({ messageEvent, typingEvent, chat, newChats });
-		socket.on(messageEvent, (chatId, message) => addMessageToChat(chatId, message));
-		socket.on(typingEvent, updateTypingInChat(chat.id));
-
-		setSocketEvents([...socketEvents, messageEvent, typingEvent]);
-	}, [setChats, socketEvents, setSocketEvents, chats]);
-
-	const resetChat = useCallback((chat) => {
-
-		addChat(chat, true);
-		setActiveChat(chat);
-	}, [addChat]);
-
-
-	//temp
-	useEffect(() => {
-		console.log({ chats, activeChat, socketEvents });
-	}, [chats, activeChat, socketEvents]);
-
-
-	const updateTypingInChat = (chatId) => {
+	const updateTypingInChat = useCallback((chatId) => {
 		return ({ isTyping, user: newUser }) => {
 			if (newUser !== newUser.name) {
 
@@ -74,7 +45,38 @@ export default function ChatContainer({
 
 			}
 		};
-	};
+	}, [chats, setChats]);
+
+
+	const addChat = useCallback((chat, reset) => {
+		setChats((oldChats) => reset ? [chat] : [...oldChats, chat]);
+	}, []);
+
+	const resetChat = useCallback((chat) => {
+		addChat(chat, true);
+		setActiveChat(chat);
+	}, [addChat]);
+
+
+	//temp
+	useEffect(() => {
+		chats.forEach((chat) => {
+			const messageEvent = `${CONSTANTS.MESSAGE_RECIEVED}-${chat.id}`;
+			const typingEvent = `${CONSTANTS.TYPING}-${chat.id}`;
+			socket.on(messageEvent, addMessageToChat);
+			socket.on(typingEvent, updateTypingInChat(chat.id));
+		})
+		return () => {
+			chats.forEach((chat) => {
+				const messageEvent = `${CONSTANTS.MESSAGE_RECIEVED}-${chat.id}`;
+				const typingEvent = `${CONSTANTS.TYPING}-${chat.id}`;
+				socket.off(messageEvent);
+				socket.off(typingEvent);
+			})
+		}
+		// eslint-disable-next-line
+	}, [chats]);
+
 
 	const sendMessage = (chatId, message) => {
 		socket.emit(CONSTANTS.MESSAGE_SENT, { chatId, message });
@@ -86,21 +88,7 @@ export default function ChatContainer({
 
 	useEffect(() => {
 		socket.emit(CONSTANTS.COMMUNITY_CHAT, resetChat);
-	}, [socket])
-
-	useEffect(() => {
-		socket.on('connect', () => {
-			socket.emit(CONSTANTS.COMMUNITY_CHAT, resetChat);
-			console.log('connected');
-		});
-
-		return () => {
-			socketEvents.forEach((event) => {
-				socket.off(event);
-			})
-		}
-	}, [socket, resetChat]);
-
+	}, [socket, resetChat])
 
 	return (
 		<div className="container">

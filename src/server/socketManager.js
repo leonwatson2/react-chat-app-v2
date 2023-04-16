@@ -95,7 +95,11 @@ function sendMessageToChat(sender) {
 
   return (chatId, message) => {
     console.log('emit', `${MESSAGE_RECIEVED}-${chatId}`);
-    io.emit(`${MESSAGE_RECIEVED}-${chatId}`, createMessage({ message, sender }))
+    io.emit(`${MESSAGE_RECIEVED}-${chatId}`, {
+      chatId,
+      message: createMessage({ message, sender })
+    })
+
   }
 }
 
