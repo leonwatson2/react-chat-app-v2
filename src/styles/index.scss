@@ -335,6 +335,7 @@ textarea {
 	display: grid;
 	height: 100%;
 	width: 76.25%;
+	grid-template-rows: min(12vh, 65px) auto min(12vh, 65px);
 }
 
 @media screen and (max-width: 510px) {
@@ -368,11 +369,13 @@ textarea {
 	@include customscrollbar();
 	overflow-y: scroll;
 	position: relative;
+	height: 100%;
 
 	.thread {
 		position: relative;
 		width: 100%;
 		min-height: 800px;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
