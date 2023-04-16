@@ -26,10 +26,11 @@ export const Layout = () => {
 
 
 	/*
-	*	Connectes user info back to the server.
+	*	Connects user info back to the server.
 	*	If the user name is already logged in.
 	*/
 	const reconnectUserInfo = useCallback(() => {
+		console.log("ReConnected");
 		if (user != null) {
 			socket.emit(CONSTANTS.USER_CONNECTED, user);
 		}
@@ -38,22 +39,24 @@ export const Layout = () => {
 	/*
 	 *	Initializes socket event callbacks
 	 */
-	useEffect((socket) => {
+	useEffect(() => {
+
 		if (socket) {
-			console.log('socket: ', { socket })
-			socket.on('connect', (value) => {
-				console.log("Connected");
-			});
-			socket.on('disconnect', reconnectUserInfo);
+			socket.on('connect', reconnectUserInfo);
+
 			if (user) {
 				handleSetUser({ isUser: false, user: user })
 			}
 		}
+		return () => {
+			if (socket)
+				socket.off('connect', reconnectUserInfo)
+		}
 	}, [socket, reconnectUserInfo, handleSetUser, user]);
-
 
 	useEffect(() => {
 		const newSocket = io(serverURI);
+		console.log('newSocket: ', { newSocket });
 		setSocket(newSocket);
 
 		return () => {
