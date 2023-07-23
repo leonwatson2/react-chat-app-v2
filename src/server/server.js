@@ -16,6 +16,14 @@ export const io = new Server(server, {
     origin,
     credentials: true
   },
+  handlePreflightRequest: (req, res) => {
+    res.writeHead(200, {
+      "Access-Control-Allow-Origin": origin,
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Credentials": true
+    });
+    res.end();
+  }
 });
 app.get('/', (req, res) => {
   res.write(`<h1>Server is running on port ${PORT}</h1>, the origin is ${origin.reduce((acc, curr) => acc + curr + " ", "")}`);
