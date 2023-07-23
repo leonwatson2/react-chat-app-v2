@@ -12,7 +12,7 @@ const server = createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://vlw2.com", "https://vlw2.com/chat"]
+    origin: '*',
   }
 });
 app.get('/', (req, res) => {
