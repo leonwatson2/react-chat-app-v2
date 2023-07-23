@@ -5,14 +5,14 @@ import { SocketManager } from './socketManager.js'
 
 const app = express()
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000;
 
 const server = createServer(app);
 
 
 export const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://vlw2.com"]
+    origin: ["http://localhost:3000", "http://vlw2.com", "https://vlw2.com/chat"]
   }
 });
 app.get('/', (req, res) => {
