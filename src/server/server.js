@@ -14,7 +14,9 @@ const origin = ["https://vlw2.com","http://vlw2.com", "http://localhost:3000","h
 export const io = new Server(server, {
   cors: {
     origin,
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST"],
+    transports: ['websocket', 'polling'],
   },
   handlePreflightRequest: (req, res) => {
     res.writeHead(200, {
