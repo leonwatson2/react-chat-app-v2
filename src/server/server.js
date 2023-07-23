@@ -9,16 +9,16 @@ const PORT = process.env.PORT || 5000;
 
 const server = createServer(app);
 
-const origin = "https://vlw2.com"
+const origin = ["https://vlw2.com","http://vlw2.com", "http://localhost:3000"]
 
 export const io = new Server(server, {
   cors: {
-    origin
+    origin,
+    credentials: true
   },
-  credentials: true
 });
 app.get('/', (req, res) => {
-  res.write(`<h1>Server is running on port ${PORT}</h1>, the origin is ${origin}`);
+  res.write(`<h1>Server is running on port ${PORT}</h1>, the origin is ${origin.reduce((acc, curr) => acc + curr + " ", "")}`);
   res.end();
 });
 
