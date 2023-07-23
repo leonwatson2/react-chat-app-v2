@@ -12,8 +12,9 @@ const server = createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: '*',
-  }
+    origin: "https://vlw2.com"
+  },
+  credentials: true
 });
 app.get('/', (req, res) => {
   res.write(`<h1>Server is running on port ${PORT}</h1>`);
