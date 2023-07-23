@@ -9,15 +9,16 @@ const PORT = process.env.PORT || 5000;
 
 const server = createServer(app);
 
+const origin = "https://vlw2.com"
 
 export const io = new Server(server, {
   cors: {
-    origin: "https://vlw2.com"
+    origin
   },
   credentials: true
 });
 app.get('/', (req, res) => {
-  res.write(`<h1>Server is running on port ${PORT}</h1>`);
+  res.write(`<h1>Server is running on port ${PORT}</h1>, the origin is ${origin}`);
   res.end();
 });
 
