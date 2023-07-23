@@ -9,12 +9,12 @@ const PORT = process.env.PORT || 5000;
 
 const server = createServer(app);
 
-const origin = ["https://vlw2.com","http://vlw2.com", "http://localhost:3000"]
+const origin = ["https://vlw2.com","http://vlw2.com", "http://localhost:3000","http://localhost"]
 
 export const io = new Server(server, {
   cors: {
     origin,
-    credentials: true
+    // credentials: true
   },
 });
 app.get('/', (req, res) => {
