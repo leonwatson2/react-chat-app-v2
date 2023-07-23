@@ -14,7 +14,7 @@ const origin = ["https://vlw2.com","http://vlw2.com", "http://localhost:3000","h
 export const io = new Server(server, {
   cors: {
     origin,
-    // credentials: true
+    credentials: true
   },
 });
 app.get('/', (req, res) => {
